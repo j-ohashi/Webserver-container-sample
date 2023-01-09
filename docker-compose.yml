@@ -50,7 +50,6 @@ services:
       APP_SCRIPT_PATH: /var/www/apps/
       APP_SCRIPT_NAME: 
     links:
-      - mongo:mongo 
       - db:db 
     depends_on: ["db"]
     logging:
@@ -72,8 +71,6 @@ services:
     environment:
       TZ: Asia/Tokyo
     ports: ["80:80", "443:443"]
-    links:
-      - node:node 
     depends_on: ["php"]
     logging:
       driver: "json-file"
