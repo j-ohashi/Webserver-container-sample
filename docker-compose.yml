@@ -3,6 +3,7 @@ services:
   db:
     image: mariadb:latest
     # image: mariadb:10.5.8
+    # platform: linux/amd64
     volumes:
       - ./conf/mysql/conf.d:/etc/mysql/conf.d
       - ./conf/mysql/mariadb.conf.d:/etc/mysql/mariadb.conf.d
@@ -23,6 +24,7 @@ services:
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:latest
+    # platform: linux/amd64
     restart: always
     ports: ["8888:80"]
     depends_on: ["db"]
