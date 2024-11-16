@@ -1,4 +1,4 @@
-FROM php:7.4-fpm
+FROM php:8.3-fpm
 RUN apt-get update && \
 	apt-get install -y \
 	git \
@@ -9,6 +9,7 @@ RUN apt-get update && \
 	mariadb-client \
 	libmcrypt-dev \
 	libmemcached-dev \
+	libssl-dev \
 	zlib1g-dev \
 	libzip-dev \
 	libfreetype6-dev \
@@ -20,10 +21,11 @@ RUN apt-get update && \
 	locales \
 
 	&& docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ \
-	&& docker-php-ext-install -j$(nproc) gd iconv pdo_mysql mysqli bcmath gettext zip intl \
-	&& pecl install memcached \
+	&& docker-php-ext-install -j$(nproc) gd iconv pdo_mysql mysqli bcmath gettext zip \
 	&& pecl install mongodb \
 	&& echo extension=memcached.so >> /usr/local/etc/php/conf.d/memcached.ini
+RUN yes '' | pecl install -f memcached-3.2.0 \
+	&& docker-php-ext-enable memcached
 COPY docker-app-entrypoint.sh /usr/local/bin
 COPY docker-app-healthcheck.sh /usr/local/bin
 RUN chmod +x /usr/local/bin/docker-app-entrypoint.sh && chmod +x /usr/local/bin/docker-app-healthcheck.sh \
